@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>go聊天室</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/js/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/css/room.css">
+</head>
+<body>
+<header class="service-header">
+    <div class="service-log">
+
+    </div>
+    <div class="service-title"><h2>GO 聊天室</h2></div>
+    <div class="service-info">
+        <i class="layui-icon layui-icon-friends"></i>
+        <span class="kefu">欢迎： 小白</span>
+        <span class="login-out">退出</span>
+    </div>
+</header>
+<div class="layui-row service-content">
+
+    <div class="layui-col-xs2 visitor-list" id="visitor-list"></div>
+    <div class="layui-col-xs8 service-chat-box">
+        <div class="chat-container">
+            <div class="layui-row chat-header" id="now-chat-box" style="text-align: center;line-height: 41px">
+               <p style="color:#1E9FFF">欢迎大家访问 go 聊天室，文明交流，你我共勉。</p>
+            </div>
+            <div class="layui-row chat-body" id="chat-area"></div>
+            <div class="layui-row chat-footer">
+                <div class="text-holder">
+                    <textarea id="textarea" placeholder="请输入"></textarea>
+                </div>
+                <div class="send-bar">
+                    <div class="tool-box">
+                        <i class="layui-icon layui-icon-face-smile" id="face" title="表情"></i>
+                        <i class="layui-icon layui-icon-picture" id="image" title="图片"></i>
+                        <i class="layui-icon" style="font-size: 20px;" id="file" title="文件">&#xe61d;</i>
+                    </div>
+                    <div class="send-btn-div">
+                        <input type="button" value="发送" class="send-input" id="sendBtn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs2 service-bar">
+        <div class="layui-tab" style="margin: 0">
+            <ul class="layui-tab-title">
+                <li class="layui-this">我的信息</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 转接提示层 -->
+<script src="/static/js/layui/layui.js"></script>
+
+</body>
+</html>
