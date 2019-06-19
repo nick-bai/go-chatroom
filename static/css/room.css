@@ -242,9 +242,14 @@ body{
     zoom: 1;
     margin: 10px 10px;
 }
-.author-name {
-    text-align: center;
-    margin: 15px 0 5px 0;
+.author-mine-name {
+    text-align: right;
+    margin: 15px 0 5px 5px;
+    color: #888;
+}
+.author-other-name {
+    text-align: left;
+    margin: 15px 5px 5px 0;
     color: #888;
 }
 .small-chat-box .chat-date {
@@ -275,7 +280,7 @@ img {
     vertical-align: middle;
 }
 .clearfloat .chat-message {
-    max-width: 252px;
+    max-width: 500px;
     padding: 8px 12px;
     border-radius: 6px;
     word-wrap: break-word;

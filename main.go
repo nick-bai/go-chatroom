@@ -12,7 +12,7 @@ func main() {
 	router.LoadHTMLGlob("view/*")
 
 
-	router.GET("/index", func(c *gin.Context) {
+	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title": "Main website",
 		})
