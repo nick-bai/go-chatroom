@@ -14,4 +14,7 @@ replace golang.org/x/tools => github.com/golang/tools v0.0.0-20190618233249-04b9
 
 replace golang.org/x/sync => github.com/golang/sync v0.0.0-20190423024810-112230192c58
 
-require github.com/gin-gonic/gin v1.4.0 // indirect
+require (
+	github.com/gin-gonic/gin v1.4.0 // indirect
+	github.com/googollee/go-socket.io v1.4.1 // indirect
+)
