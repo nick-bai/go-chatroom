@@ -2,10 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/googollee/go-engine.io"
-	"github.com/googollee/go-engine.io/transport"
-	"github.com/googollee/go-engine.io/transport/polling"
-	"github.com/googollee/go-engine.io/transport/websocket"
 	"github.com/googollee/go-socket.io"
 	"html/template"
 	"log"
@@ -25,19 +21,7 @@ func indexHandler(w http.ResponseWriter,r *http.Request)  {
 
 func main()  {
 
-	pt := polling.Default
-
-	wt := websocket.Default
-	wt.CheckOrigin = func(req *http.Request) bool {
-		return true
-	}
-
-	server, err := socketio.NewServer(&engineio.Options{
-		Transports: []transport.Transport{
-			pt,
-			wt,
-		},
-	})
+	server, err := socketio.NewServer(nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,12 +31,20 @@ func main()  {
 		fmt.Println("connected:", s.ID())
 		return nil
 	})
-
-	server.OnEvent("/", "msg", func(s socketio.Conn, msg string) {
+	server.OnEvent("/", "notice", func(s socketio.Conn, msg string) {
 		fmt.Println("notice:", msg)
 		s.Emit("reply", "have "+msg)
 	})
-
+	server.OnEvent("/chat", "msg", func(s socketio.Conn, msg string) string {
+		s.SetContext(msg)
+		return "您的答案是： " + msg
+	})
+	server.OnEvent("/", "bye", func(s socketio.Conn) string {
+		last := s.Context().(string)
+		s.Emit("bye", last)
+		s.Close()
+		return last
+	})
 	server.OnError("/", func(e error) {
 		fmt.Println("meet error:", e)
 	})

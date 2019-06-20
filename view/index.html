@@ -96,14 +96,24 @@
 
 <!-- 转接提示层 -->
 <script src="/js/layui/layui.js"></script>
+<script src="/js/jquery.js"></script>
 <script src="/js/socket.io.js"></script>
 <script>
-    var socket = io("http://127.0.0.1:8080");
+    var socket = io();
+    // socket.emit('msg', 'hello');
+    var s2 = io("/chat");
+    socket.on('reply', function(msg){
+        $('#chat-area').append("收到回复");
+        $('#chat-area').append($('<li>').text(msg));
+    });
 
-    // 当连接服务端成功时触发connect默认事件
-    socket.on('connect', function(){
-        console.log('connect success');
-        socket.emit('msg', "jack");
+    $('#sendBtn').click(function(){
+
+        s2.emit('msg', $('#textarea').val(), function(data){
+            $('#chat-area').append($('<li>').text('ACK CALLBACK: ' + data));
+        });
+        socket.emit('notice', $('#textarea').val());
+        $('#textarea').val('');
     });
 </script>
 </body>
