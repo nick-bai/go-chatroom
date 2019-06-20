@@ -2,15 +2,45 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"github.com/googollee/go-engine.io"
+	"github.com/googollee/go-engine.io/transport"
+	"github.com/googollee/go-engine.io/transport/polling"
+	"github.com/googollee/go-engine.io/transport/websocket"
 	"github.com/googollee/go-socket.io"
+	"html/template"
 	"log"
 	"net/http"
 )
 
-var server *socketio.Server
+func indexHandler(w http.ResponseWriter,r *http.Request)  {
 
-func socketHandler(c *gin.Context) {
+	tem,err := template.ParseFiles("view/index.html")
+	if err != nil{
+		fmt.Println("读取文件失败,err",err)
+		return
+	}
+
+	tem.Execute(w, "")
+}
+
+func main()  {
+
+	pt := polling.Default
+
+	wt := websocket.Default
+	wt.CheckOrigin = func(req *http.Request) bool {
+		return true
+	}
+
+	server, err := socketio.NewServer(&engineio.Options{
+		Transports: []transport.Transport{
+			pt,
+			wt,
+		},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
@@ -18,31 +48,25 @@ func socketHandler(c *gin.Context) {
 		return nil
 	})
 
-	server.ServeHTTP(c.Writer, c.Request)
-}
-
-func main() {
-	router := gin.Default()
-	var err error
-
-	router.Static("/static", "./static")
-	router.LoadHTMLGlob("view/*")
-
-	server, err = socketio.NewServer(nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	router.GET("/socket.io/", socketHandler)
-	router.POST("/socket.io/", socketHandler)
-	router.Handle("WS", "/socket.io/", socketHandler)
-	router.Handle("WSS", "/socket.io/", socketHandler)
-
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", gin.H{
-			"title": "Main website",
-		})
+	server.OnEvent("/", "msg", func(s socketio.Conn, msg string) {
+		fmt.Println("notice:", msg)
+		s.Emit("reply", "have "+msg)
 	})
 
-	router.Run(":8080")
+	server.OnError("/", func(e error) {
+		fmt.Println("meet error:", e)
+	})
+	server.OnDisconnect("/", func(s socketio.Conn, msg string) {
+		fmt.Println("closed", msg)
+	})
+
+	go server.Serve()
+	defer server.Close()
+
+	http.Handle("/socket.io/", server)
+	http.Handle("/", http.FileServer(http.Dir("./static")))
+	http.HandleFunc("/chat", indexHandler)
+
+	log.Println("Serving at localhost:8080...")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

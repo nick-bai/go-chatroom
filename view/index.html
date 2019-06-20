@@ -6,8 +6,8 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/static/js/layui/css/layui.css">
-    <link rel="stylesheet" href="/static/css/room.css">
+    <link rel="stylesheet" href="/js/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/room.css">
 </head>
 <body>
 <header class="service-header">
@@ -40,7 +40,7 @@
                     <div class="right">
                         <div class="chat-message">我就说个话，不装逼</div>
                         <div class="chat-avatars">
-                            <img src="/static/images/1.png">
+                            <img src="/images/1.png">
                         </div>
                       </div>
                 </div>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="left">
                         <div class="chat-avatars">
-                            <img src="/static/images/1.png">
+                            <img src="/images/1.png">
                         </div>
                         <div class="chat-message">我就说个话，不装逼2222</div>
                      </div>
@@ -95,10 +95,16 @@
 </div>
 
 <!-- 转接提示层 -->
-<script src="/static/js/layui/layui.js"></script>
-<script src="/static/js/socket.io.js"></script>
+<script src="/js/layui/layui.js"></script>
+<script src="/js/socket.io.js"></script>
 <script>
     var socket = io("http://127.0.0.1:8080");
+
+    // 当连接服务端成功时触发connect默认事件
+    socket.on('connect', function(){
+        console.log('connect success');
+        socket.emit('msg', "jack");
+    });
 </script>
 </body>
 </html>
